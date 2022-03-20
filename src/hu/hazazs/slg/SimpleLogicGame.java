@@ -15,7 +15,7 @@ final class SimpleLogicGame {
 		Cracker cracker = new Cracker(new Safe(NUMBER_OF_DIGITS));
 		try (Scanner scanner = new Scanner(System.in)) {
 			for (int i = 1; i <= NUMBER_OF_TRIES; i++) {
-				System.out.printf("%d. try: ", i);
+				System.out.printf("%s. try: ", i + Color.RESET);
 				String PIN = scanner.nextLine();
 				if (cracker.checkPIN(PIN)) {
 					System.out.println("YOU WON!");
