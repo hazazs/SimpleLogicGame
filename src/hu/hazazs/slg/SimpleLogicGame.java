@@ -18,11 +18,11 @@ final class SimpleLogicGame {
 				System.out.printf("%s. try: ", i + Color.RESET);
 				String PIN = scanner.nextLine();
 				if (cracker.checkPIN(PIN)) {
-					System.out.println("YOU WON!");
+					System.out.println("You have successfully cracked the safe!");
 					return;
 				}
 			}
-			System.out.printf("YOU LOSE! The proper PIN was: %s", cracker.getSafe().getPIN());
+			System.out.printf("You have failed! The proper PIN was: %s", cracker.getSafe().getPIN());
 		}
 	}
 
