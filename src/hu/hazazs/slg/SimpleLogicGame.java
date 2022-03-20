@@ -12,17 +12,17 @@ final class SimpleLogicGame {
 	}
 
 	private void run() {
-		Safe safe = new Safe(new PIN(NUMBER_OF_DIGITS));
+		Cracker cracker = new Cracker(new Safe(NUMBER_OF_DIGITS));
 		try (Scanner scanner = new Scanner(System.in)) {
 			for (int i = 1; i <= NUMBER_OF_TRIES; i++) {
 				System.out.printf("%d. try: ", i);
 				String PIN = scanner.nextLine();
-				if (safe.checkPIN(PIN)) {
+				if (cracker.checkPIN(PIN)) {
 					System.out.println("YOU WON!");
 					return;
 				}
 			}
-			System.out.printf("YOU LOSE! The proper PIN was: %s", safe.getPIN().getPIN());
+			System.out.printf("YOU LOSE! The proper PIN was: %s", cracker.getSafe().getPIN());
 		}
 	}
 
