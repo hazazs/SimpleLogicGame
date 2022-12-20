@@ -16,8 +16,9 @@ final class Safe {
 
 	private String generatePIN(int digits) {
 		StringBuilder PIN = new StringBuilder();
+		Random random = new Random();
 		for (int i = 0; i < digits; i++) {
-			PIN.append(new Random().nextInt(10));
+			PIN.append(random.nextInt(10));
 		}
 		return PIN.toString();
 	}

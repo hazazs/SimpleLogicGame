@@ -15,9 +15,9 @@ final class Cracker {
 
 	private void createMask(String PIN) {
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < this.safe.getPIN().length(); i++) {
+		for (int i = 0; i < safe.getPIN().length(); i++) {
 			builder.append("initial".equals(PIN) ? "_" : getDigit(PIN, i));
-			if (i < this.safe.getPIN().length() - 1) {
+			if (i < safe.getPIN().length() - 1) {
 				builder.append(getRelationalOperator(i));
 			}
 		}
@@ -25,9 +25,9 @@ final class Cracker {
 	}
 
 	private String getDigit(String PIN, int index) {
-		if (this.safe.getPIN().charAt(index) == PIN.charAt(index)) {
+		if (safe.getPIN().charAt(index) == PIN.charAt(index)) {
 			return Color.GREEN + PIN.charAt(index) + Color.RESET;
-		} else if (this.safe.getPIN().contains(String.valueOf(PIN.charAt(index)))) {
+		} else if (safe.getPIN().contains(String.valueOf(PIN.charAt(index)))) {
 			return Color.YELLOW + PIN.charAt(index) + Color.RESET;
 		} else {
 			return Color.RED + PIN.charAt(index) + Color.RESET;
@@ -48,7 +48,7 @@ final class Cracker {
 
 	boolean checkPIN(String PIN) {
 		createMask(PIN);
-		return this.safe.getPIN().equals(PIN);
+		return safe.getPIN().equals(PIN);
 	}
 
 }
