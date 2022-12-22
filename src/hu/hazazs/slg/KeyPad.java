@@ -44,7 +44,7 @@ final class KeyPad {
 		} else if (cracker.getGrey().contains(digit)) {
 			return Color.getColor().grey(digit);
 		} else {
-			return Color.getColor().grey(digit);
+			return Color.getColor().black(digit);
 		}
 	}
 
