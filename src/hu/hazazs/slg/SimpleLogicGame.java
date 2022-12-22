@@ -14,6 +14,11 @@ final class SimpleLogicGame {
 	}
 
 	private void run() {
+		if (10 - FORBIDDEN_DIGITS.size() < NUMBER_OF_DIGITS) {
+			System.out.print(Color.getColor()
+					.red("Invalid configuration: 10 - FORBIDDEN_DIGITS must be at least NUMBER_OF_DIGITS"));
+			return;
+		}
 		PIN generatedPIN = PINGenerator.getGenerator().generate(NUMBER_OF_DIGITS, FORBIDDEN_DIGITS);
 		Cracker cracker = Cracker.getCracker(generatedPIN);
 		cracker.createInitialMask();

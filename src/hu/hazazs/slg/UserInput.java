@@ -22,10 +22,15 @@ final class UserInput {
 
 	PIN readPINFromUser(int numberOfDigits, int index) {
 		String input;
+		boolean inputInvalid;
 		do {
 			System.out.print(Color.getColor().black(String.format("%d. try: ", index)));
 			input = scanner.nextLine();
-		} while (!input.matches(String.format("\\d{%d}", numberOfDigits)));
+			inputInvalid = !input.matches(String.format("\\d{%d}", numberOfDigits));
+			if (inputInvalid) {
+				System.out.println(Color.getColor().red(String.format("The input must be %d digits.", numberOfDigits)));
+			}
+		} while (inputInvalid);
 		List<Integer> digits = new ArrayList<>();
 		for (int i = 0; i < input.length(); i++) {
 			digits.add(Integer.parseInt(String.valueOf(input.charAt(i))));
