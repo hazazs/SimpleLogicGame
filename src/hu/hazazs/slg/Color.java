@@ -3,9 +3,10 @@ package hu.hazazs.slg;
 final class Color {
 
 	private static Color color;
-	private static final String GREEN = "\u001B[92m";
+	private static final String GREEN = "\u001B[32m";
 	private static final String YELLOW = "\u001B[33m";
 	private static final String RED = "\u001B[31m";
+	private static final String GREY = "\u001B[37m";
 	private static final String RESET = "\u001B[0m";
 
 	private Color() {
@@ -28,6 +29,10 @@ final class Color {
 
 	String red(Object object) {
 		return RED + object + RESET;
+	}
+
+	String grey(Object object) {
+		return GREY + object + RESET;
 	}
 
 	String black(Object object) {

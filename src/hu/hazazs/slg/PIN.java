@@ -1,7 +1,6 @@
 package hu.hazazs.slg;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 final class PIN {
@@ -16,22 +15,8 @@ final class PIN {
 		return digits;
 	}
 
-	@Override
-	public boolean equals(Object object) {
-		if (this == object) {
-			return true;
-		}
-		if (!(object instanceof PIN)) {
-			return false;
-		}
-		PIN other = (PIN) object;
-		return Objects.equals(digits, other.digits);
-	}
-
-	@Override
-	public int hashCode() {
-		int sum = digits.stream().mapToInt(Integer::intValue).sum();
-		return Objects.hash(sum);
+	Integer getDigit(int index) {
+		return digits.get(index);
 	}
 
 	@Override

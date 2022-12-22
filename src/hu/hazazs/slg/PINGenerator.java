@@ -3,6 +3,7 @@ package hu.hazazs.slg;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 final class PINGenerator {
 
@@ -18,7 +19,7 @@ final class PINGenerator {
 		return generator;
 	}
 
-	PIN generate(int numberOfDigits, List<Integer> forbiddenDigits) {
+	PIN generate(int numberOfDigits, Set<Integer> forbiddenDigits) {
 		List<Integer> digits = new ArrayList<>();
 		Random random = new Random();
 		while (digits.size() < numberOfDigits) {
