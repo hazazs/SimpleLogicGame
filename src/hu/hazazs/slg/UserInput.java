@@ -25,7 +25,7 @@ final class UserInput {
 		boolean inputInvalid;
 		do {
 			System.out.print(
-					Color.getColor().black(String.format("%s%n%d. try: ", "=".repeat(9 + numberOfDigits), index)));
+					Color.getColor().black(String.format("%s%n%d. try: ", "=".repeat(numberOfDigits * 4), index)));
 			input = scanner.nextLine();
 			inputInvalid = !input.matches(String.format("\\d{%d}", numberOfDigits));
 			if (inputInvalid) {

@@ -10,10 +10,10 @@ final class Cracker {
 	private static Cracker cracker;
 	private final PIN generatedPIN;
 	private final List<String> operators;
+	private final Set<Integer> grey;
 	private final Set<Integer> green = new HashSet<>();
 	private final Set<Integer> yellow = new HashSet<>();
 	private final Set<Integer> red = new HashSet<>();
-	private final Set<Integer> grey;
 
 	private Cracker(PIN generatedPIN, Set<Integer> forbiddenDigits) {
 		this.generatedPIN = generatedPIN;
@@ -28,6 +28,10 @@ final class Cracker {
 		return cracker;
 	}
 
+	Set<Integer> getGrey() {
+		return grey;
+	}
+
 	Set<Integer> getGreen() {
 		return green;
 	}
@@ -38,10 +42,6 @@ final class Cracker {
 
 	Set<Integer> getRed() {
 		return red;
-	}
-
-	Set<Integer> getGrey() {
-		return grey;
 	}
 
 	private List<String> getOperators() {

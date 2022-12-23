@@ -35,16 +35,16 @@ final class KeyPad {
 	}
 
 	private String getDigitWithColor(Integer digit) {
-		if (cracker.getGreen().contains(digit)) {
+		if (cracker.getGrey().contains(digit)) {
+			return Color.getColor().grey(digit);
+		} else if (cracker.getGreen().contains(digit)) {
 			return Color.getColor().green(digit);
 		} else if (cracker.getYellow().contains(digit)) {
 			return Color.getColor().yellow(digit);
 		} else if (cracker.getRed().contains(digit)) {
 			return Color.getColor().red(digit);
-		} else if (cracker.getGrey().contains(digit)) {
-			return Color.getColor().grey(digit);
 		} else {
-			return Color.getColor().black(digit);
+			return String.valueOf(digit);
 		}
 	}
 
