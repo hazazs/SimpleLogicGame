@@ -1,19 +1,23 @@
 package hu.hazazs.slg;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 final class Cracker {
 
 	private static Cracker cracker;
 	private final PIN generatedPIN;
-	private final Set<Integer> grey;
+	private final List<String> operators;
 	private final Set<Integer> green = new HashSet<>();
 	private final Set<Integer> yellow = new HashSet<>();
 	private final Set<Integer> red = new HashSet<>();
+	private final Set<Integer> grey;
 
 	private Cracker(PIN generatedPIN, Set<Integer> forbiddenDigits) {
 		this.generatedPIN = generatedPIN;
+		operators = getOperators();
 		grey = forbiddenDigits;
 	}
 
@@ -22,10 +26,6 @@ final class Cracker {
 			cracker = new Cracker(generatedPIN, forbiddenDigits);
 		}
 		return cracker;
-	}
-
-	Set<Integer> getGrey() {
-		return grey;
 	}
 
 	Set<Integer> getGreen() {
@@ -38,6 +38,20 @@ final class Cracker {
 
 	Set<Integer> getRed() {
 		return red;
+	}
+
+	Set<Integer> getGrey() {
+		return grey;
+	}
+
+	private List<String> getOperators() {
+		List<String> operators = new ArrayList<>();
+		for (int i = 0; i < generatedPIN.getDigits().size() - 1; i++) {
+			int left = generatedPIN.getDigit(i);
+			int right = generatedPIN.getDigit(i + 1);
+			operators.add(left > right ? " > " : " < ");
+		}
+		return operators;
 	}
 
 	void createInitialMask() {
@@ -60,7 +74,7 @@ final class Cracker {
 				builder.append("_");
 			}
 			if (i < generatedPIN.getDigits().size() - 1) {
-				builder.append(getRelationalOperator(i));
+				builder.append(operators.get(i));
 			}
 		}
 		System.out.println(builder);
@@ -80,16 +94,6 @@ final class Cracker {
 					red.add(guessPIN.getDigit(i));
 				}
 			}
-		}
-	}
-
-	private String getRelationalOperator(int index) {
-		int left = generatedPIN.getDigits().get(index);
-		int right = generatedPIN.getDigits().get(index + 1);
-		if (left > right) {
-			return " > ";
-		} else {
-			return " < ";
 		}
 	}
 
