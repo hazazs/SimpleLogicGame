@@ -26,13 +26,14 @@ final class SimpleLogicGame {
 			for (int i = 1; i <= NUMBER_OF_TRIES; i++) {
 				PIN guessPIN = userInput.readPINFromUser(NUMBER_OF_DIGITS, i);
 				cracker.checkPIN(guessPIN);
-				if (cracker.getKeyPad().getDigits().values().stream().map(Digit::getColor)
-						.filter(color -> color.equals(Color.GREEN)).count() == NUMBER_OF_DIGITS) {
-					System.out.print("Congratulations! You have successfully cracked the PIN code!");
+				if (cracker.didWeWin()) {
+					System.out.print(
+							ANSIColor.getColor().green("Congratulations! You have successfully cracked the PIN code!"));
 					return;
 				}
 			}
-			System.out.printf("You have failed! The proper PIN was: %s", generatedPIN);
+			System.out.print(ANSIColor.getColor()
+					.red(String.format("You have failed! The proper PIN code was: %s", generatedPIN)));
 		}
 	}
 

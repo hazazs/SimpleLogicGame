@@ -51,7 +51,7 @@ final class Cracker {
 		StringBuilder mask = new StringBuilder();
 		for (int i = 0; i < generatedPIN.getDigits().size(); i++) {
 			if (keyPad.getDigits().containsKey(generatedPIN.getDigit(i))
-					&& keyPad.getDigits().get(generatedPIN.getDigit(i)).getColor().equals(Color.GREEN)) {
+					&& keyPad.getDigits().get(generatedPIN.getDigit(i)).getColor() == Color.GREEN) {
 				mask.append(ANSIColor.getColor().green(generatedPIN.getDigit(i)));
 			} else {
 				mask.append("_");
@@ -71,19 +71,25 @@ final class Cracker {
 	private void updateColors(PIN guessPIN) {
 		for (int i = 0; i < guessPIN.getDigits().size(); i++) {
 			if (keyPad.getDigits().containsKey(guessPIN.getDigit(i))) {
+				Digit digitFromKeyPad = keyPad.getDigits().get(guessPIN.getDigit(i));
 				if (guessPIN.getDigit(i) == generatedPIN.getDigit(i)) {
-					keyPad.getDigits().get(guessPIN.getDigit(i)).setColor(Color.GREEN);
+					digitFromKeyPad.setColor(Color.GREEN);
 				} else if (generatedPIN.getDigits().contains(guessPIN.getDigit(i))) {
-					if (!keyPad.getDigits().get(guessPIN.getDigit(i)).getColor().equals(Color.GREEN)) {
-						keyPad.getDigits().get(guessPIN.getDigit(i)).setColor(Color.YELLOW);
+					if (digitFromKeyPad.getColor() != Color.GREEN) {
+						digitFromKeyPad.setColor(Color.YELLOW);
 					}
 				} else {
-					if (!keyPad.getDigits().get(guessPIN.getDigit(i)).getColor().equals(Color.GREY)) {
-						keyPad.getDigits().get(guessPIN.getDigit(i)).setColor(Color.RED);
+					if (digitFromKeyPad.getColor() != Color.GREY) {
+						digitFromKeyPad.setColor(Color.RED);
 					}
 				}
 			}
 		}
+	}
+
+	boolean didWeWin() {
+		return keyPad.getDigits().values().stream().map(Digit::getColor).filter(color -> color == Color.GREEN)
+				.count() == generatedPIN.getDigits().size();
 	}
 
 }
