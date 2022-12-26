@@ -1,7 +1,6 @@
 package hu.hazazs.slg;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -10,15 +9,13 @@ final class Cracker {
 	private static Cracker cracker;
 	private final PIN generatedPIN;
 	private final List<String> operators;
-	private final Set<Integer> grey;
-	private final Set<Integer> green = new HashSet<>();
-	private final Set<Integer> yellow = new HashSet<>();
-	private final Set<Integer> red = new HashSet<>();
+	private final KeyPad keyPad = KeyPad.getKeyPad();
 
 	private Cracker(PIN generatedPIN, Set<Integer> forbiddenDigits) {
 		this.generatedPIN = generatedPIN;
 		operators = getOperators();
-		grey = forbiddenDigits;
+		greyOutForbiddenDigits(forbiddenDigits);
+		createMask();
 	}
 
 	static Cracker getCracker(PIN generatedPIN, Set<Integer> forbiddenDigits) {
@@ -28,20 +25,8 @@ final class Cracker {
 		return cracker;
 	}
 
-	Set<Integer> getGrey() {
-		return grey;
-	}
-
-	Set<Integer> getGreen() {
-		return green;
-	}
-
-	Set<Integer> getYellow() {
-		return yellow;
-	}
-
-	Set<Integer> getRed() {
-		return red;
+	KeyPad getKeyPad() {
+		return keyPad;
 	}
 
 	private List<String> getOperators() {
@@ -54,44 +39,48 @@ final class Cracker {
 		return operators;
 	}
 
-	void createInitialMask() {
-		createMask(true);
-	}
-
-	void createMask(PIN guessPIN) {
-		createMask(false, guessPIN);
-	}
-
-	private void createMask(boolean initial, PIN... PINs) {
-		if (!initial) {
-			updateSets(PINs[0]);
+	private void greyOutForbiddenDigits(Set<Integer> forbiddenDigits) {
+		for (Integer forbiddenDigit : forbiddenDigits) {
+			if (keyPad.getDigits().containsKey(forbiddenDigit)) {
+				keyPad.getDigits().get(forbiddenDigit).setColor(Color.GREY);
+			}
 		}
-		StringBuilder builder = new StringBuilder();
+	}
+
+	private void createMask() {
+		StringBuilder mask = new StringBuilder();
 		for (int i = 0; i < generatedPIN.getDigits().size(); i++) {
-			if (green.contains(generatedPIN.getDigit(i))) {
-				builder.append(Color.getColor().green(generatedPIN.getDigit(i)));
+			if (keyPad.getDigits().containsKey(generatedPIN.getDigit(i))
+					&& keyPad.getDigits().get(generatedPIN.getDigit(i)).getColor().equals(Color.GREEN)) {
+				mask.append(ANSIColor.getColor().green(generatedPIN.getDigit(i)));
 			} else {
-				builder.append("_");
+				mask.append("_");
 			}
 			if (i < generatedPIN.getDigits().size() - 1) {
-				builder.append(operators.get(i));
+				mask.append(operators.get(i));
 			}
 		}
-		System.out.println(builder);
+		System.out.printf("%s%n%n%s", mask, keyPad);
 	}
 
-	private void updateSets(PIN guessPIN) {
+	void checkPIN(PIN guessPIN) {
+		updateColors(guessPIN);
+		createMask();
+	}
+
+	private void updateColors(PIN guessPIN) {
 		for (int i = 0; i < guessPIN.getDigits().size(); i++) {
-			if (guessPIN.getDigit(i) == generatedPIN.getDigit(i)) {
-				green.add(guessPIN.getDigit(i));
-				yellow.remove(guessPIN.getDigit(i));
-			} else if (generatedPIN.getDigits().contains(guessPIN.getDigit(i))) {
-				if (!green.contains(guessPIN.getDigit(i))) {
-					yellow.add(guessPIN.getDigit(i));
-				}
-			} else {
-				if (!grey.contains(guessPIN.getDigit(i))) {
-					red.add(guessPIN.getDigit(i));
+			if (keyPad.getDigits().containsKey(guessPIN.getDigit(i))) {
+				if (guessPIN.getDigit(i) == generatedPIN.getDigit(i)) {
+					keyPad.getDigits().get(guessPIN.getDigit(i)).setColor(Color.GREEN);
+				} else if (generatedPIN.getDigits().contains(guessPIN.getDigit(i))) {
+					if (!keyPad.getDigits().get(guessPIN.getDigit(i)).getColor().equals(Color.GREEN)) {
+						keyPad.getDigits().get(guessPIN.getDigit(i)).setColor(Color.YELLOW);
+					}
+				} else {
+					if (!keyPad.getDigits().get(guessPIN.getDigit(i)).getColor().equals(Color.GREY)) {
+						keyPad.getDigits().get(guessPIN.getDigit(i)).setColor(Color.RED);
+					}
 				}
 			}
 		}

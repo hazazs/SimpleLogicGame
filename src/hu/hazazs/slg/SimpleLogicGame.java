@@ -15,23 +15,20 @@ final class SimpleLogicGame {
 
 	private void run() {
 		if (10 - FORBIDDEN_DIGITS.size() < NUMBER_OF_DIGITS) {
-			System.out.print(Color.getColor()
+			System.out.print(ANSIColor.getColor()
 					.red("Invalid configuration: 10 - FORBIDDEN_DIGITS must be at least NUMBER_OF_DIGITS"));
 			return;
 		}
 		PIN generatedPIN = PINGenerator.getGenerator().generate(NUMBER_OF_DIGITS, FORBIDDEN_DIGITS);
 		Cracker cracker = Cracker.getCracker(generatedPIN, FORBIDDEN_DIGITS);
-		KeyPad keyPad = KeyPad.getKeyPad(cracker);
-		cracker.createInitialMask();
-		keyPad.showKeyPad();
 		try (Scanner scanner = new Scanner(System.in)) {
 			UserInput userInput = UserInput.getUserInput(scanner);
 			for (int i = 1; i <= NUMBER_OF_TRIES; i++) {
 				PIN guessPIN = userInput.readPINFromUser(NUMBER_OF_DIGITS, i);
-				cracker.createMask(guessPIN);
-				keyPad.showKeyPad();
-				if (cracker.getGreen().size() == NUMBER_OF_DIGITS) {
-					System.out.print("You have successfully cracked the safe!");
+				cracker.checkPIN(guessPIN);
+				if (cracker.getKeyPad().getDigits().values().stream().map(Digit::getColor)
+						.filter(color -> color.equals(Color.GREEN)).count() == NUMBER_OF_DIGITS) {
+					System.out.print("Congratulations! You have successfully cracked the PIN code!");
 					return;
 				}
 			}
