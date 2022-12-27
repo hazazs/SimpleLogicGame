@@ -5,21 +5,21 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-final class PINGenerator {
+final class ListGenerator {
 
-	private static PINGenerator generator;
+	private static ListGenerator generator;
 
-	private PINGenerator() {
+	private ListGenerator() {
 	}
 
-	static PINGenerator getGenerator() {
+	static ListGenerator getGenerator() {
 		if (generator == null) {
-			generator = new PINGenerator();
+			generator = new ListGenerator();
 		}
 		return generator;
 	}
 
-	PIN generate(int numberOfDigits, Set<Integer> forbiddenDigits) {
+	List<Integer> generate(int numberOfDigits, Set<Integer> forbiddenDigits) {
 		List<Integer> digits = new ArrayList<>(numberOfDigits);
 		Random random = new Random();
 		while (digits.size() < numberOfDigits) {
@@ -28,7 +28,7 @@ final class PINGenerator {
 				digits.add(digit);
 			}
 		}
-		return new PIN(digits);
+		return digits;
 	}
 
 }
