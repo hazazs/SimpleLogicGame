@@ -20,19 +20,13 @@ final class UserInput {
 		return userInput;
 	}
 
-	PIN readPINFromUser(int numberOfDigits, int index) {
+	PIN readPINFromUser(int numberOfDigits, int index, UserInputValidator validator) {
 		String input;
-		boolean inputInvalid;
 		do {
 			System.out.print(
 					ANSIColor.getColor().black(String.format("%s%n%d. try: ", "=".repeat(numberOfDigits * 4), index)));
 			input = scanner.nextLine();
-			inputInvalid = !input.matches(String.format("\\d{%d}", numberOfDigits));
-			if (inputInvalid) {
-				System.out.println(
-						ANSIColor.getColor().red(String.format("The input must be %d digits.", numberOfDigits)));
-			}
-		} while (inputInvalid);
+		} while (!validator.validate(input, numberOfDigits));
 		List<Integer> digits = new ArrayList<>();
 		for (int i = 0; i < input.length(); i++) {
 			digits.add(Integer.parseInt(String.valueOf(input.charAt(i))));

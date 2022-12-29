@@ -63,22 +63,30 @@ final class Cracker {
 		System.out.printf("%s%n%n%s", mask, keyPad);
 	}
 
-	void checkPIN(PIN guessPIN) {
-		updateColors(guessPIN);
+	List<Integer> collectNotGreenDigits() {
+		List<Integer> notGreenDigits = new ArrayList<>();
+		for (Integer digit : generatedPIN.getDigits()) {
+			if (keyPad.getDigits().containsKey(digit) && keyPad.getDigits().get(digit).getColor() != Color.GREEN) {
+				notGreenDigits.add(digit);
+			}
+		}
+		return notGreenDigits;
+	}
+
+	void checkPIN(PIN guessPIN, List<Integer> notGreenDigits) {
+		updateColors(guessPIN, notGreenDigits);
 		createMask();
 	}
 
-	private void updateColors(PIN guessPIN) {
+	private void updateColors(PIN guessPIN, List<Integer> notGreenDigits) {
 		for (int i = 0; i < guessPIN.getDigits().size(); i++) {
 			if (keyPad.getDigits().containsKey(guessPIN.getDigit(i))) {
 				Digit digitFromKeyPad = keyPad.getDigits().get(guessPIN.getDigit(i));
-				if (guessPIN.getDigit(i) == generatedPIN.getDigit(i)) {
+				if (guessPIN.getDigit(i) == notGreenDigits.get(i)) {
 					digitFromKeyPad.setColor(Color.GREEN);
-				} else if (generatedPIN.getDigits().contains(guessPIN.getDigit(i))) {
-					if (digitFromKeyPad.getColor() != Color.GREEN) {
-						digitFromKeyPad.setColor(Color.YELLOW);
-					}
-				} else {
+				} else if (notGreenDigits.contains(guessPIN.getDigit(i))) {
+					digitFromKeyPad.setColor(Color.YELLOW);
+				} else if (!generatedPIN.getDigits().contains(guessPIN.getDigit(i))) {
 					if (digitFromKeyPad.getColor() != Color.GREY) {
 						digitFromKeyPad.setColor(Color.RED);
 					}
