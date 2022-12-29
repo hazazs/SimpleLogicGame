@@ -1,5 +1,8 @@
 package hu.hazazs.slg;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 final class UserInputValidator {
 
 	private static UserInputValidator validator;
@@ -23,22 +26,25 @@ final class UserInputValidator {
 		return validator;
 	}
 
-	boolean validate(String input, int numberOfDigits) {
+	boolean validate(String guess, int numberOfDigits) {
 		boolean valid = true;
-		if (!input.matches(String.format("\\d{%d}", numberOfDigits))) {
+		if (!guess.matches(String.format("\\d{%d}", numberOfDigits))) {
 			System.out
 					.println(ANSIColor.getColor().red(String.format("The input must be %d digit(s).", numberOfDigits)));
 			valid = false;
 		} else {
-			if (operatorCheck && !operatorCheck()) {
+			List<Integer> wholeGuess = cracker.createWholeGuess(guess);
+			System.out.println(
+					wholeGuess.stream().map(digit -> String.valueOf(digit)).collect(Collectors.joining("   ")));
+			if (operatorCheck && !operatorCheck(wholeGuess, cracker.getOperators())) {
 				System.out.println(ANSIColor.getColor().red("Operator violation(s)."));
 				valid = false;
 			}
-			if (greyRedCheck && !greyRedCheck()) {
+			if (greyRedCheck && !greyRedCheck(wholeGuess)) {
 				System.out.println(ANSIColor.getColor().red("Invalid (grey, red) character(s)."));
 				valid = false;
 			}
-			if (duplicationCheck && !duplicationCheck()) {
+			if (duplicationCheck && !duplicationCheck(wholeGuess)) {
 				System.out.println(ANSIColor.getColor().red("Duplication error."));
 				valid = false;
 			}
@@ -46,17 +52,17 @@ final class UserInputValidator {
 		return valid;
 	}
 
-	private boolean operatorCheck() {
+	private boolean operatorCheck(List<Integer> wholeGuess, List<String> operators) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	private boolean greyRedCheck() {
+	private boolean greyRedCheck(List<Integer> wholeGuess) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	private boolean duplicationCheck() {
+	private boolean duplicationCheck(List<Integer> wholeGuess) {
 		// TODO Auto-generated method stub
 		return false;
 	}

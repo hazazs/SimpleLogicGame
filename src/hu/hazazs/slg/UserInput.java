@@ -1,7 +1,5 @@
 package hu.hazazs.slg;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 final class UserInput {
@@ -20,18 +18,14 @@ final class UserInput {
 		return userInput;
 	}
 
-	PIN readPINFromUser(int numberOfDigits, int index, UserInputValidator validator) {
-		String input;
+	String readGuessFromUser(int numberOfDigits, int index, UserInputValidator validator) {
+		String guess;
 		do {
 			System.out.print(
 					ANSIColor.getColor().black(String.format("%s%n%d. try: ", "=".repeat(numberOfDigits * 4), index)));
-			input = scanner.nextLine();
-		} while (!validator.validate(input, numberOfDigits));
-		List<Integer> digits = new ArrayList<>();
-		for (int i = 0; i < input.length(); i++) {
-			digits.add(Integer.parseInt(String.valueOf(input.charAt(i))));
-		}
-		return new PIN(digits);
+			guess = scanner.nextLine();
+		} while (!validator.validate(guess, numberOfDigits));
+		return guess;
 	}
 
 }

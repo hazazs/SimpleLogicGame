@@ -1,7 +1,6 @@
 package hu.hazazs.slg;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -33,9 +32,8 @@ final class SimpleLogicGame {
 			UserInputValidator validator = UserInputValidator.getValidator(cracker, OPERATOR_CHECK, GREY_RED_CHECK,
 					DUPLICATION_CHECK);
 			for (int i = 1; i <= NUMBER_OF_TRIES; i++) {
-				List<Integer> notGreenDigits = cracker.collectNotGreenDigits();
-				PIN guessPIN = userInput.readPINFromUser(notGreenDigits.size(), i, validator);
-				cracker.checkPIN(guessPIN, notGreenDigits);
+				String guess = userInput.readGuessFromUser(cracker.getNumberOfNotGreenDigits(), i, validator);
+				cracker.checkPIN(new PIN(cracker.createWholeGuess(guess)));
 				if (cracker.didWeWin()) {
 					System.out.print(ANSIColor.getColor()
 							.green("Congratulations!\nYou have successfully cracked the PIN code!"));
