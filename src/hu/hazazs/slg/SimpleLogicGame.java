@@ -8,10 +8,10 @@ final class SimpleLogicGame {
 
 	private static final int NUMBER_OF_DIGITS = 4;
 	private static final int NUMBER_OF_TRIES = 4;
-	private static final Difficulty difficulty = Difficulty.HARD;
+	private static final Difficulty difficulty = Difficulty.MEDIUM;
 	private static final Set<Integer> FORBIDDEN_DIGITS = new HashSet<>();
 	private static final boolean OPERATOR_CHECK = true;
-	private static final boolean GREY_RED_CHECK = false;
+	private static final boolean GREY_RED_CHECK = true;
 	private static final boolean DUPLICATION_CHECK = false;
 
 	public static void main(String[] args) {

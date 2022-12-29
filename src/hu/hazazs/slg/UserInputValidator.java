@@ -36,16 +36,20 @@ final class UserInputValidator {
 		} else {
 			List<Integer> wholeGuess = cracker.createWholeGuess(guess);
 			if (operatorCheck) {
-				List<Character> output = operatorCheck(wholeGuess, cracker.getOperators());
-				if (output.stream().anyMatch(Character::isInvalid)) {
+				List<Character> output = operatorCheck(wholeGuess);
+				if (output.stream().anyMatch(character -> character.getColor() == Color.RED)) {
 					System.out.println(ANSIColor.getColor().red("Operator violation(s): "
 							+ output.stream().map(Character::toString).collect(Collectors.joining(""))));
 					valid = false;
 				}
 			}
-			if (greyRedCheck && !greyRedCheck(wholeGuess)) {
-				System.out.println(ANSIColor.getColor().red("Invalid (grey, red) character(s)."));
-				valid = false;
+			if (greyRedCheck) {
+				List<Character> output = greyRedCheck(wholeGuess);
+				if (output.stream().anyMatch(character -> character.getColor() != Color.BLACK)) {
+					System.out.println(ANSIColor.getColor().red("Invalid character(s):  "
+							+ output.stream().map(Character::toString).collect(Collectors.joining(" "))));
+					valid = false;
+				}
 			}
 			if (duplicationCheck && !duplicationCheck(wholeGuess)) {
 				System.out.println(ANSIColor.getColor().red("Duplication error."));
@@ -59,25 +63,38 @@ final class UserInputValidator {
 		return valid;
 	}
 
-	private List<Character> operatorCheck(List<Integer> wholeGuess, List<String> operators) {
+	private List<Character> operatorCheck(List<Integer> wholeGuess) {
 		List<Character> output = new ArrayList<>(2 * wholeGuess.size() - 1);
 		for (int i = 0; i < wholeGuess.size(); i++) {
-			output.add(new Character(wholeGuess.get(i), false));
+			output.add(new Character(wholeGuess.get(i), Color.BLACK));
 			if (i < wholeGuess.size() - 1) {
-				if ((" < ".equals(operators.get(i)) && wholeGuess.get(i) >= wholeGuess.get(i + 1))
-						|| (" > ".equals(operators.get(i)) && wholeGuess.get(i) <= wholeGuess.get(i + 1))) {
-					output.add(new Character(operators.get(i).trim(), true));
+				String operator = cracker.getOperators().get(i).trim();
+				if (("<".equals(operator) && wholeGuess.get(i) >= wholeGuess.get(i + 1))
+						|| (">".equals(operator) && wholeGuess.get(i) <= wholeGuess.get(i + 1))) {
+					output.add(new Character(operator, Color.RED));
 				} else {
-					output.add(new Character(operators.get(i).trim(), false));
+					output.add(new Character(operator, Color.BLACK));
 				}
 			}
 		}
 		return output;
 	}
 
-	private boolean greyRedCheck(List<Integer> wholeGuess) {
-		// TODO Auto-generated method stub
-		return false;
+	private List<Character> greyRedCheck(List<Integer> wholeGuess) {
+		List<Character> output = new ArrayList<>(wholeGuess.size());
+		for (int i = 0; i < wholeGuess.size(); i++) {
+			if (cracker.getKeyPad().getDigits().containsKey(wholeGuess.get(i))) {
+				Digit digitFromKeyPad = cracker.getKeyPad().getDigits().get(wholeGuess.get(i));
+				if (digitFromKeyPad.getColor() == Color.GREY) {
+					output.add(new Character(digitFromKeyPad.getValue(), Color.GREY));
+				} else if (digitFromKeyPad.getColor() == Color.RED) {
+					output.add(new Character(digitFromKeyPad.getValue(), Color.RED));
+				} else {
+					output.add(new Character(digitFromKeyPad.getValue(), Color.BLACK));
+				}
+			}
+		}
+		return output;
 	}
 
 	private boolean duplicationCheck(List<Integer> wholeGuess) {

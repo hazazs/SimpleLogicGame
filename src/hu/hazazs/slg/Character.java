@@ -3,20 +3,25 @@ package hu.hazazs.slg;
 final class Character {
 
 	private final String value;
-	private final boolean invalid;
+	private final Color color;
 
-	Character(Object object, boolean invalid) {
+	Character(Object object, Color color) {
 		value = String.valueOf(object);
-		this.invalid = invalid;
+		this.color = color;
 	}
 
-	boolean isInvalid() {
-		return invalid;
+	Color getColor() {
+		return color;
 	}
 
 	@Override
 	public String toString() {
-		return invalid ? ANSIColor.getColor().red(value) : ANSIColor.getColor().black(value);
+		return switch (color) {
+			case BLACK -> ANSIColor.getColor().black(value);
+			case GREY -> ANSIColor.getColor().grey(value);
+			case RED -> ANSIColor.getColor().red(value);
+			default -> value;
+		};
 	}
 
 }
