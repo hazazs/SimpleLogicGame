@@ -10,6 +10,11 @@ final class Character {
 		this.color = color;
 	}
 
+	Character(Object object) {
+		value = String.valueOf(object);
+		this.color = Color.BLACK;
+	}
+
 	Color getColor() {
 		return color;
 	}
@@ -17,7 +22,6 @@ final class Character {
 	@Override
 	public String toString() {
 		return switch (color) {
-			case BLACK -> ANSIColor.getColor().black(value);
 			case GREY -> ANSIColor.getColor().grey(value);
 			case RED -> ANSIColor.getColor().red(value);
 			default -> value;

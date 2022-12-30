@@ -12,7 +12,7 @@ final class SimpleLogicGame {
 	private static final Set<Integer> FORBIDDEN_DIGITS = new HashSet<>();
 	private static final boolean OPERATOR_CHECK = true;
 	private static final boolean GREY_RED_CHECK = true;
-	private static final boolean DUPLICATION_CHECK = false;
+	private static final boolean DUPLICATION_CHECK = true;
 
 	public static void main(String[] args) {
 		new SimpleLogicGame().run();

@@ -38,22 +38,26 @@ final class UserInputValidator {
 			if (operatorCheck) {
 				List<Character> output = operatorCheck(wholeGuess);
 				if (output.stream().anyMatch(character -> character.getColor() == Color.RED)) {
-					System.out.println(ANSIColor.getColor().red("Operator violation(s): "
-							+ output.stream().map(Character::toString).collect(Collectors.joining(""))));
+					System.out.println(ANSIColor.getColor().red("Operator violation(s): ")
+							+ output.stream().map(Character::toString).collect(Collectors.joining("")));
 					valid = false;
 				}
 			}
 			if (greyRedCheck) {
 				List<Character> output = greyRedCheck(wholeGuess);
 				if (output.stream().anyMatch(character -> character.getColor() != Color.BLACK)) {
-					System.out.println(ANSIColor.getColor().red("Invalid character(s):  "
-							+ output.stream().map(Character::toString).collect(Collectors.joining(" "))));
+					System.out.println(ANSIColor.getColor().red("Invalid character(s):  ")
+							+ output.stream().map(Character::toString).collect(Collectors.joining(" ")));
 					valid = false;
 				}
 			}
-			if (duplicationCheck && !duplicationCheck(wholeGuess)) {
-				System.out.println(ANSIColor.getColor().red("Duplication error."));
-				valid = false;
+			if (duplicationCheck) {
+				List<Character> output = duplicationCheck(wholeGuess);
+				if (output.stream().anyMatch(character -> character.getColor() == Color.RED)) {
+					System.out.println(ANSIColor.getColor().red("Duplication error:     ")
+							+ output.stream().map(Character::toString).collect(Collectors.joining(" ")));
+					valid = false;
+				}
 			}
 			if (valid) {
 				System.out.println(
@@ -66,14 +70,14 @@ final class UserInputValidator {
 	private List<Character> operatorCheck(List<Integer> wholeGuess) {
 		List<Character> output = new ArrayList<>(2 * wholeGuess.size() - 1);
 		for (int i = 0; i < wholeGuess.size(); i++) {
-			output.add(new Character(wholeGuess.get(i), Color.BLACK));
+			output.add(new Character(wholeGuess.get(i)));
 			if (i < wholeGuess.size() - 1) {
 				String operator = cracker.getOperators().get(i).trim();
 				if (("<".equals(operator) && wholeGuess.get(i) >= wholeGuess.get(i + 1))
 						|| (">".equals(operator) && wholeGuess.get(i) <= wholeGuess.get(i + 1))) {
 					output.add(new Character(operator, Color.RED));
 				} else {
-					output.add(new Character(operator, Color.BLACK));
+					output.add(new Character(operator));
 				}
 			}
 		}
@@ -90,16 +94,24 @@ final class UserInputValidator {
 				} else if (digitFromKeyPad.getColor() == Color.RED) {
 					output.add(new Character(digitFromKeyPad.getValue(), Color.RED));
 				} else {
-					output.add(new Character(digitFromKeyPad.getValue(), Color.BLACK));
+					output.add(new Character(digitFromKeyPad.getValue()));
 				}
 			}
 		}
 		return output;
 	}
 
-	private boolean duplicationCheck(List<Integer> wholeGuess) {
-		// TODO Auto-generated method stub
-		return false;
+	private List<Character> duplicationCheck(List<Integer> wholeGuess) {
+		List<Character> output = new ArrayList<>(wholeGuess.size());
+		for (int i = 0; i < wholeGuess.size(); i++) {
+			Integer currentDigit = wholeGuess.get(i);
+			if (wholeGuess.stream().filter(digit -> digit == currentDigit).count() > 1) {
+				output.add(new Character(currentDigit, Color.RED));
+			} else {
+				output.add(new Character(currentDigit));
+			}
+		}
+		return output;
 	}
 
 }
