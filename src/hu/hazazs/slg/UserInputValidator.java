@@ -38,24 +38,30 @@ final class UserInputValidator {
 			if (operatorCheck) {
 				List<Character> output = operatorCheck(wholeGuess);
 				if (output.stream().anyMatch(character -> character.getColor() == Color.RED)) {
-					System.out.println(ANSIColor.getColor().red("Operator violation(s): ")
-							+ output.stream().map(Character::toString).collect(Collectors.joining("")));
+					System.out.println(ANSIColor.getColor()
+							.red(Character.numberOfNotBlackCharacters(output) > 1 ? "Operator violations: "
+									: "Operator violation:  ")
+							+ Character.joinCharacters(output, ""));
 					valid = false;
 				}
 			}
 			if (greyRedCheck) {
 				List<Character> output = greyRedCheck(wholeGuess);
 				if (output.stream().anyMatch(character -> character.getColor() != Color.BLACK)) {
-					System.out.println(ANSIColor.getColor().red("Invalid character(s):  ")
-							+ output.stream().map(Character::toString).collect(Collectors.joining(" ")));
+					System.out.println(ANSIColor.getColor()
+							.red(Character.numberOfNotBlackCharacters(output) > 1 ? "Invalid characters:  "
+									: "Invalid character:   ")
+							+ Character.joinCharacters(output, " "));
 					valid = false;
 				}
 			}
 			if (duplicationCheck) {
 				List<Character> output = duplicationCheck(wholeGuess);
 				if (output.stream().anyMatch(character -> character.getColor() == Color.RED)) {
-					System.out.println(ANSIColor.getColor().red("Duplication error:     ")
-							+ output.stream().map(Character::toString).collect(Collectors.joining(" ")));
+					System.out.println(ANSIColor.getColor()
+							.red(Character.numberOfNotBlackCharacters(output) > 2 ? "Duplication errors:  "
+									: "Duplication error:   ")
+							+ Character.joinCharacters(output, " "));
 					valid = false;
 				}
 			}

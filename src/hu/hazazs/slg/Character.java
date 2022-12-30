@@ -1,5 +1,8 @@
 package hu.hazazs.slg;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 final class Character {
 
 	private final String value;
@@ -17,6 +20,14 @@ final class Character {
 
 	Color getColor() {
 		return color;
+	}
+
+	static int numberOfNotBlackCharacters(List<Character> output) {
+		return (int) output.stream().filter(character -> character.getColor() != Color.BLACK).count();
+	}
+
+	static String joinCharacters(List<Character> output, String delimeter) {
+		return output.stream().map(Character::toString).collect(Collectors.joining(delimeter));
 	}
 
 	@Override
